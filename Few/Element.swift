@@ -13,6 +13,17 @@ public typealias ViewType = NSView
 
 public var LogDiff = false
 
+public protocol El {
+	var key: String? { get }
+	var frame: CGRect { get set }
+
+	func canDiff(other: El) -> Bool
+	func applyDiff(view: ViewType, other: El)
+	func realize() -> ViewType?
+	func derealize()
+	func getChildren() -> [El]
+}
+
 /// Elements are the basic building block. They represent a visual thing which 
 /// can be diffed with other elements.
 public class Element {

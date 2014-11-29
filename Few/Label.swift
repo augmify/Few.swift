@@ -52,3 +52,50 @@ public class Label: Element {
 		return field
 	}
 }
+
+//public protocol El {
+//	var key: String? { get }
+//	var frame: CGRect { get set }
+//
+//	func canDiff(other: El) -> Bool
+//	func applyDiff(view: ViewType, other: El)
+//	func realize() -> ViewType?
+//	func derealize()
+//	func getChildren() -> [El]
+//}
+
+struct LabelTNG: El {
+	var key: String?
+	var frame: CGRect
+
+	private let attributedString: NSAttributedString
+
+	func canDiff(other: El) -> Bool {
+		return other is LabelTNG
+	}
+
+	func applyDiff(view: ViewType, other: El) {
+		let otherLabel = unsafeBitCast(other, LabelTNG.self) // other as LabelTNG
+		let textField = view as NSTextField
+
+		if attributedString != textField.attributedStringValue {
+			textField.attributedStringValue = attributedString
+		}
+	}
+
+	func realize() -> ViewType? {
+		let field = NSTextField(frame: frame)
+		field.editable = false
+		field.drawsBackground = false
+		field.bordered = false
+		field.font = DefaultLabelFont
+		field.attributedStringValue = attributedString
+		return field
+	}
+
+	func derealize() {}
+
+	func getChildren() -> [El] {
+		return []
+	}
+}
